@@ -2,8 +2,7 @@ class EventTimer{
   private:
     unsigned long endTime;
   public:
-    EventTimer(){
-    }
+    //EventTimer(){}
     void Start(unsigned long ms){
       endTime = millis()+ms;
     }
@@ -14,6 +13,3 @@ class EventTimer{
       endTime = millis();
     }
 };
-
-
-

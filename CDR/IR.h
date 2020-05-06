@@ -14,4 +14,3 @@ class IR{
     //reference remoteControll sample program
   }
 };
-
