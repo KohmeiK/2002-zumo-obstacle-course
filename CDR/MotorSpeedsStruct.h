@@ -2,8 +2,8 @@
 #define MOTOR_SPEEDS_H
 
 struct MotorSpeeds{
-  int left;
-  int right;
+  double left;
+  double right;
 };
 
 #endif
