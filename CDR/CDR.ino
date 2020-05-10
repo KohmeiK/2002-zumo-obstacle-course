@@ -8,27 +8,29 @@
 #include "WallFollow.h"
 #include "MotorSpeedsStruct.h"
 #include "RampDriver.h"
+#include "Params.h"
 
 #include <Wire.h>
 #include <Zumo32U4.h>
 
 Zumo32U4Encoders encoders1;//Need to figure out if we want to define here as static, pass by reference, etc...
+Zumo32U4LCD lcd;
 
 enum ROBOT_STATE {STOPPED, WAITING, WALL_FOLLOWING, TURN, LINE_FOLLOWING, DRIVE_RAMP, DRIVE_FORWARD};
-ROBOT_STATE state = LINE_FOLLOWING;
+ROBOT_STATE state = STOPPED;
 ROBOT_STATE nextState = STOPPED;
 
-const bool IRFrontOnly = true;//If true IRChecker will only use front sensor, if false all 3 will be utilized
-const int DeadReckonDistance_cm = 20; //Actually set when we start testing
-Button ButtonC(17);
+const int DeadReckonDistance_cm = DR_DistanceCM; //Actually set when we start testing
+Button ButtonC;
 EventTimer timer;
-LineTrack lineTracker(1000);
+EventTimer displayTimer;
+LineTrack lineTracker;
 KinematicTurn turn;
-WallFollow wallFollower(30, 30, 0, .7, -.5, 1);
-IR remoteChecker(IRFrontOnly);
+WallFollow wallFollower;
+IR remoteChecker;
 RampDriver rampDriver;
 DeadReckon simpleDriver(encoders1);
-PIDVelocity pid(0,1,0.03,500);
+PIDVelocity pid;
 
 MotorSpeeds targetSpeeds;
 
@@ -42,13 +44,14 @@ void setup() {
   pid.Init();
   rampDriver.Init();
   wallFollower.Init();
+  displayTimer.Start(200);
   
   targetSpeeds.left = 0;
   targetSpeeds.right = 0;
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  
   switch (state)
   {
     case STOPPED:
@@ -116,7 +119,22 @@ void loop() {
       }
       break;
   }
+  if(displayTimer.isExpired()){
+    lcd.clear();
+    switch(state){
+      case STOPPED: lcd.print("Stopped"); lcd.gotoXY(0,1); lcd.print("Press C"); break;
+      case WAITING: lcd.print("Waiting"); lcd.gotoXY(0,1); lcd.print("1 sec");break;
+      case WALL_FOLLOWING: lcd.print("Wall"); lcd.gotoXY(0,1); lcd.print("Follow"); break;
+      case TURN: lcd.print("Kinematc"); lcd.gotoXY(0,1); lcd.print("Turn"); break;
+      case LINE_FOLLOWING: lcd.print("Line"); lcd.gotoXY(0,1); lcd.print("Follow"); break;
+      case DRIVE_RAMP: lcd.print("Drive"); lcd.gotoXY(0,1); lcd.print("Ramp"); break;
+      case DRIVE_FORWARD: lcd.print("Drive"); lcd.gotoXY(0,1); lcd.print("Forwards"); break;
+    }
+    displayTimer.Start(200);
+  }
   pid.setTargets(targetSpeeds);
   pid.update();
+
+  
   
 }

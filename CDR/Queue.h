@@ -1,4 +1,7 @@
 /*
+ * THIS IS NOT MADE BY OUR TEAM! We are just using a Queue library.
+ * Please don't give us points or take off points for this!
+ * 
  * Queue.h
  * 
  * By Steven de Salas

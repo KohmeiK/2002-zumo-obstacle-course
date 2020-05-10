@@ -29,11 +29,11 @@ class PIDVelocity{
   public:
     bool enable = true;
     
-    PIDVelocity(float KP, float KI, float KD, int IC){
-      Kp = KP;
-      Ki = KI;
-      Kd = KD;
-      intergrealCap = IC;
+    PIDVelocity(){
+      Kp = PV_Kp;
+      Ki = PV_Ki;
+      Kd = PV_Kd;
+      intergrealCap = PV_IntergeralCap;
     }
     
     void Init(){

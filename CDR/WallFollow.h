@@ -15,13 +15,13 @@ class WallFollow{
     float Ki;
     float lastError = 0;
   public:
-  WallFollow(int target,int portNum, int baseSpeed,float KP, float KI ,float KD){
-    pinNum = portNum;
-    Kp = KP;
-    Kd = KD;
-    Ki = KI;
-    targetDist = target;
-    this->baseSpeed = baseSpeed;
+  WallFollow(){
+    pinNum = WF_SensorPort;
+    Kp = WF_Kp;
+    Kd = WF_Kd;
+    Ki = WF_Ki;
+    targetDist = WF_Distance;
+    this->baseSpeed = WF_BaseSpeed;
   }
   void Init(){
     pinMode(pinNum, INPUT); //INPUT for IR sensor

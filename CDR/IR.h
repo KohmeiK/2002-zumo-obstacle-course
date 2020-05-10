@@ -3,12 +3,12 @@
 class IR
 {
   private:
-  bool frontOnly = true;
+  bool frontOnly;
       
   public:  
-  IR(bool useFrontOnly)
+  IR()
   {
-    frontOnly = useFrontOnly;
+    frontOnly = IR_useFrontOnly;
   }
     
   void Init()

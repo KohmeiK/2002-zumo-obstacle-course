@@ -1,3 +1,5 @@
+#include "Params.h"
+
 class Button{
   private:
     enum State {Stable, Unstable};
@@ -9,9 +11,9 @@ class Button{
     int timerDuration; //Duration of debouce timer
     State state; //State for main state machine
     
-    Button(int pinNum){
+    Button(){
       state = Stable;
-      pinNumber = pinNum;
+      pinNumber = BT_PinNum;
       timerDuration = 10; //hard coded debouce time
     }
     
