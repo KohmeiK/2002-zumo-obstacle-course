@@ -17,7 +17,7 @@ Zumo32U4Encoders encoders1;//Need to figure out if we want to define here as sta
 Zumo32U4LCD lcd;
 
 enum ROBOT_STATE {STOPPED, WAITING, WALL_FOLLOWING, TURN, LINE_FOLLOWING, DRIVE_RAMP, DRIVE_FORWARD};
-ROBOT_STATE state = STOPPED;
+ROBOT_STATE state = DRIVE_RAMP;
 ROBOT_STATE nextState = STOPPED;
 
 const int DeadReckonDistance_cm = DR_DistanceCM; //Actually set when we start testing
@@ -119,6 +119,7 @@ void loop() {
       }
       break;
   }
+  
   if(displayTimer.isExpired()){
     lcd.clear();
     switch(state){
