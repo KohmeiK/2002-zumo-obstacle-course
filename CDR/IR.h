@@ -29,8 +29,9 @@ class IR
     
   bool isDetecting(){
     //If any of the sensors are tripped then return true.
-    return !FastGPIO::Pin<SENSOR_LEFT>::isInputHigh() ||
-           !FastGPIO::Pin<SENSOR_RIGHT>::isInputHigh() ||
-           !FastGPIO::Pin<SENSOR_FRONT>::isInputHigh();
+        if(frontOnly) return !FastGPIO::Pin<SENSOR_FRONT>::isInputHigh();
+        else return !FastGPIO::Pin<SENSOR_LEFT>::isInputHigh() ||
+                    !FastGPIO::Pin<SENSOR_RIGHT>::isInputHigh() ||
+                    !FastGPIO::Pin<SENSOR_FRONT>::isInputHigh();
   }
 };

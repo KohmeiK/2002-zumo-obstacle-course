@@ -6,25 +6,28 @@ Queue<int> queue(100);
 class LineTrack{
   private:
     //EDIT THESE TO TUNE:
-    //plot your error, if its very noisy increase this value (up to 10 or 15 only) 
-    const int NUMBER_OF_READINGS_TO_AVE = 3;
-    //put your zumo on a uniform colored surface, get the avearge and negatve the value
-    const int SENSOR_IMBALANCE_OFFSET = 1050; 
-    //This is for line detection only - not line tracking (passed in from constructor)
-    int threshold; 
-    //if your line brighter (whiter) than your surface?
+
+    //(super important)put your zumo on a uniform colored surface, get the avearge and plug in
+    const int SENSOR_IMBALANCE_OFFSET = 280; 
+    //is your line brighter (whiter) than your surface?
     bool whiteLine = true;
     //PID constants
-    float Kp = 0.02;
+    float Kp = 0.03;
     float Ki = 0;
-    float Kd = 0.008;
+    float Kd = 0.024;
+
+    //This is for line detection only - not line tracking (passed in from constructor)
+    int threshold; 
+    
+    //(less important)plot your error, if its very noisy increase this value (up to 10 or 15 only) 
+    const int NUMBER_OF_READINGS_TO_AVE = 3;
   
     Zumo32U4LineSensors lineSensors;
     #define NUM_SENSORS 5
     uint16_t lineSensorValues[NUM_SENSORS];
     bool useEmitters = true;
     const int baseSpeed = 6; //Depending on the curvyness of line you could increase
-    int maxEffort = 30;
+    int maxEffort = 30; //maybe increase if you have super sharp turns
     
   public:
     LineTrack(int thresh){
@@ -47,18 +50,17 @@ class LineTrack{
       
       lineSensors.read(lineSensorValues, useEmitters ? QTR_EMITTERS_ON : QTR_EMITTERS_OFF);
       int innerError = (5*lineSensorValues[1])+(lineSensorValues[2])-(3*lineSensorValues[3]);
-      
+
       if(queue.count() >= NUMBER_OF_READINGS_TO_AVE){
         aveSum -= (int)queue.pop();
       }
-      
       aveSum += innerError;
       queue.push(innerError);
 
-      float Error = ((float)aveSum/(float)NUMBER_OF_READINGS_TO_AVE)-1050;
+      float Error = ((float)aveSum/(float)NUMBER_OF_READINGS_TO_AVE)-SENSOR_IMBALANCE_OFFSET;
 
-      //uncomment and open serial plotter
-      //Serial.println(Error); 
+//      uncomment and open serial plotter
+      Serial.println(Error); 
       
       static int sumError = 0;
       sumError += Error;
