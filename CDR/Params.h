@@ -24,9 +24,9 @@
  #define LT_Kp 0.04;
  #define LT_Ki 0;
  #define LT_Kd 0.024;
- #define LT_LineThreshold 500;
+ #define LT_LineThreshold 110;
 
-//BUTTON PinNum -> Pin number for start button (17 is C)
+//BUTTON PinNum -> Pin number for start button (17 is btnC)
  #define BT_PinNum 17;
 
 /**
@@ -52,13 +52,16 @@
  *              and subtracted from this.
  * Kp, Ki, Kd -> PID for steering to remain at the right distnace             
  *               from the wall.
+ * isWallLeft -> Are you trying to follow a wall that is to the left
+ *               of the robot? If so make this true.
  */
- #define WF_SensorPort A6;
- #define WF_Distance 30;
+ #define WF_SensorPort A0;
+ #define WF_Distance 25;
  #define WF_BaseSpeed 10;
- #define WF_Kp 0.7;
- #define WF_Ki 1;
- #define WF_Kd -0.5;
+ #define WF_Kp 0.4;
+ #define WF_Ki 0;
+ #define WF_Kd -0.1;
+ #define WF_isWallLeft false;
 
  /**
   * PID VELOCITY

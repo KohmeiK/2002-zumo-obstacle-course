@@ -15,6 +15,8 @@ class WallFollow{
     float Ki;
     float lastError = 0;
 
+    bool leftWall = WF_isWallLeft;
+
     const int steeringMax = 30;
   public:
   WallFollow(){
@@ -34,6 +36,8 @@ class WallFollow{
   MotorSpeeds calcSpeeds(){
     //Conversion function from Analog Val to distance from LAB1
     float distanceCm = pow((analogRead(pinNum)/2206.0),(-1/0.738));
+
+    Serial.println(distanceCm);
     float error = targetDist - distanceCm;
 
     errorSum += error;
@@ -50,6 +54,8 @@ class WallFollow{
 
     if(steering > steeringMax) steering = steeringMax;
     else if(steering < -steeringMax) steering = -steeringMax;
+
+    if(leftWall) steering = -steering;
 
     MotorSpeeds output;
     output.left = baseSpeed - steering;

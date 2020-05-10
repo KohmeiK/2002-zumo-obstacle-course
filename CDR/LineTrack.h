@@ -39,9 +39,20 @@ class LineTrack{
     }
     bool lineDetected(){
       lineSensors.read(lineSensorValues, useEmitters ? QTR_EMITTERS_ON : QTR_EMITTERS_OFF);
-      int average = (lineSensorValues[0]+lineSensorValues[1]+lineSensorValues[2] +
-      lineSensorValues[3] + lineSensorValues[4])/NUM_SENSORS;
-      if(whiteLine) return(average < threshold);
+      int average = (lineSensorValues[1]+lineSensorValues[2] + lineSensorValues[3])/3;
+      if(whiteLine){
+        if(average < 90){
+          Serial.print("LINE DETECTED!");
+          Serial.print(lineSensorValues[1]);
+          Serial.print('\t');
+          Serial.print(lineSensorValues[2]);
+          Serial.print('\t');
+          Serial.println(lineSensorValues[3]);
+          return true;
+        }else{
+          return false;
+        }
+      }
       else return(average > threshold);
     }
     MotorSpeeds calcSpeeds(){
@@ -81,18 +92,14 @@ class LineTrack{
       lastError = Error;
 
 //      uncomment and open serial plotter
-      Serial.println(Error); 
+//      Serial.println(Error); 
       
       //Need more debug? Uncomment these
-//      Serial.print(lineSensorValues[0]);
-//      Serial.print('\t'); 
-//      Serial.print(lineSensorValues[1]);
-//      Serial.print('\t');
-//      Serial.print(lineSensorValues[2]);
-//      Serial.print('\t');
-//      Serial.println(lineSensorValues[3]);
-//      Serial.print('\t');
-//      Serial.println(lineSensorValues[4]);
+      Serial.print(lineSensorValues[1]);
+      Serial.print('\t');
+      Serial.print(lineSensorValues[2]);
+      Serial.print('\t');
+      Serial.println(lineSensorValues[3]);
 
       return output;
     }
