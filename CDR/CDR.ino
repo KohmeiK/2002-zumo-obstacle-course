@@ -12,18 +12,22 @@
 #include <Wire.h>
 #include <Zumo32U4.h>
 
+Zumo32U4Encoders encoders1;//Need to figure out if we want to define here as static, pass by reference, etc...
+
 enum ROBOT_STATE {STOPPED, WAITING, WALL_FOLLOWING, TURN, LINE_FOLLOWING, DRIVE_RAMP, DRIVE_FORWARD};
 ROBOT_STATE state = LINE_FOLLOWING;
 ROBOT_STATE nextState = STOPPED;
 
+const bool IRFrontOnly = true;//If true IRChecker will only use front sensor, if false all 3 will be utilized
+const int DeadReckonDistance_cm = 20; //Actually set when we start testing
 Button ButtonC(17);
 EventTimer timer;
 LineTrack lineTracker(1000);
 KinematicTurn turn;
 WallFollow wallFollower(30, 30, 0, .7, -.5, 1);
-IR remoteChecker;
+IR remoteChecker(IRFrontOnly);
 RampDriver rampDriver;
-DeadReckon simpleDriver;
+DeadReckon simpleDriver(encoders1);
 PIDVelocity pid(0,1,0.03,500);
 
 MotorSpeeds targetSpeeds;
@@ -96,6 +100,8 @@ void loop() {
       if (rampDriver.isFinished())
       {
         state = DRIVE_FORWARD;
+        simpleDriver.setTarget(DeadReckonDistance_cm);
+        targetSpeeds = simpleDriver.startDrive();
         break;
       }
       targetSpeeds=rampDriver.calcSpeeds();
@@ -112,4 +118,5 @@ void loop() {
   }
   pid.setTargets(targetSpeeds);
   pid.update();
+  
 }

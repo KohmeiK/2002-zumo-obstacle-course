@@ -1,18 +1,36 @@
 #include <Zumo32U4.h>
 
-class IR{
-  public:
-  //IR(){}
-  void Init(){
-    // Enable pull-up resistors on all the sensor inputs.
-    FastGPIO::Pin<SENSOR_LEFT>::setInputPulledUp();
-    FastGPIO::Pin<SENSOR_RIGHT>::setInputPulledUp();
-    FastGPIO::Pin<SENSOR_FRONT>::setInputPulledUp();
+class IR
+{
+  private:
+  bool frontOnly = true;
+      
+  public:  
+  IR(bool useFrontOnly)
+  {
+    frontOnly = useFrontOnly;
   }
+    
+  void Init()
+  {
+    if(frontOnly)
+    {
+      // Enable pull-up for front sensor input only
+      FastGPIO::Pin<SENSOR_FRONT>::setInputPulledUp();
+    }
+    else
+    {
+      // Enable pull-up resistors on all the sensor inputs.
+      FastGPIO::Pin<SENSOR_LEFT>::setInputPulledUp();
+      FastGPIO::Pin<SENSOR_RIGHT>::setInputPulledUp();
+      FastGPIO::Pin<SENSOR_FRONT>::setInputPulledUp();
+    }
+  }
+    
   bool isDetecting(){
-    //for now only
-    return false;
-    //I have no idea how to do this
-    //reference remoteControll sample program
+    //If any of the sensors are tripped then return true.
+    return !FastGPIO::Pin<SENSOR_LEFT>::isInputHigh() ||
+           !FastGPIO::Pin<SENSOR_RIGHT>::isInputHigh() ||
+           !FastGPIO::Pin<SENSOR_FRONT>::isInputHigh();
   }
 };
