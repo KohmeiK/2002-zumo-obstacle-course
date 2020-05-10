@@ -26,6 +26,7 @@ class PIDVelocity{
     float targetLeft = 0;
     float targetRight = 0;
     uint16_t prevNow;
+    bool invertLeft;
   public:
     bool enable = true;
     
@@ -34,6 +35,7 @@ class PIDVelocity{
       Ki = PV_Ki;
       Kd = PV_Kd;
       intergrealCap = PV_IntergeralCap;
+      invertLeft = InvertLeft;
     }
     
     void Init(){
@@ -100,8 +102,9 @@ class PIDVelocity{
     
         float effortLeft = Kp * errorLeft + Ki * sumLeft + Kd * derLeft;
         float effortRight = Kp * errorRight + Ki * sumRight + Kd * derRight;
-        
-        motors.setSpeeds(effortLeft, effortRight); //up to you to add the right motor
+
+        if (!invertLeft) motors.setSpeeds(effortLeft, effortRight); 
+        else motors.setSpeeds(-effortLeft, effortRight);
     }
   }
 };

@@ -67,11 +67,13 @@
   * PID VELOCITY
   * Kp, Ki, Kd -> PID to maintain target velocity
   * IntergeralCap -> Intergeral cap to avoid intergeral windup.
+  * InvertLeft -> reverse direction of left drive motor
   */
  #define PV_Kp 10;
  #define PV_Ki 1;
  #define PV_Kd 0.03;
  #define PV_IntergeralCap 500;
+ #define InvertLeft true;
 
 /**
  * RAMP DIRVER
@@ -86,5 +88,21 @@
  #define RD_RampAngleDEG -20; //negative if you are climbing headfirst
  #define RD_BaseSpeed 15;
 
+/**
+ * Kinematic Turn
+ * 
+ * WheelBase -> effective wheel base of your robot. 
+ *            May need to be adjusted to get correct turning angle 
+ *            depending on driving surface due to slip
+ * TurningSpeed -> Speed at which the robot turns
+ * WheelDiameter -> tread height
+ * DistPerTick -> distance traveled per tick of encoder
+ * UpdateInterval -> time interval over which to update position and speeds
+ */
+ #define WheelBase 4.25;// inch
+ #define TurningSpeed 15.;
+ #define WheelDiameter 1.5;// inch
+ #define DistPerTick .00772;// inch/tick
+ #define UpdateInterval 20;//ms
  
  
