@@ -1,22 +1,40 @@
 #include <Zumo32U4.h>
-
-Zumo32U4Encoders encoders3; //im guessing we want to do this
-//with the average reading of both encoders
+#include "MotorSpeedsStruct.h"
 
 class DeadReckon{
-  int distance;
+  
+  private:
+  Zumo32U4Encoders enc; 
+  MotorSpeeds targets;
+  int targetDist;
+  const double multiplier = 1;
+  const float k_cmToEnc = 53.99325;
+  
   public:
-  //DeadReckon(){}
-  //bool calcSpeeds(){}
-  //I dont think we need this, we don't constantly update speed
   
-  void startDrive(int distance){
-    //find target enc pos based on dist
-    //update target for PIDvelo
+  //Constructor with encoders passed by reference
+  DeadReckon(Zumo32U4Encoders encoders)
+  {
+   this->enc = encoders;
   }
-  bool isFinished(){
-    //return true when enc target is reached
-  }
-  
-};
 
+  void setTarget(int distance_cm){
+    //find target enc pos based on dist
+    targetDist = encAvgCurrent() + (distance_cm * k_cmToEnc);       
+  }
+
+  MotorSpeeds startDrive(){
+      targets.left = (80*multiplier); //Set constant drive speeds to 80/400 * multiplier
+      targets.right = (80*multiplier);
+      return targets;
+    }
+
+  bool isFinished(){
+    return ((enc.getCountsLeft() >= targetDist) || (enc.getCountsRight() >= targetDist)); //Return true if either value has reached target
+  }
+  
+  //Calculate Average Encoder Value
+  float encAvgCurrent(){
+    return ((enc.getCountsLeft() + enc.getCountsRight())/2); 
+  }
+};
