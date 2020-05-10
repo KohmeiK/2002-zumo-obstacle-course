@@ -10,6 +10,8 @@ class IR{
     FastGPIO::Pin<SENSOR_FRONT>::setInputPulledUp();
   }
   bool isDetecting(){
+    //for now only
+    return false;
     //I have no idea how to do this
     //reference remoteControll sample program
   }

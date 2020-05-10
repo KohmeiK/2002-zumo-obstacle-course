@@ -13,7 +13,7 @@
 #include <Zumo32U4.h>
 
 enum ROBOT_STATE {STOPPED, WAITING, WALL_FOLLOWING, TURN, LINE_FOLLOWING, DRIVE_RAMP, DRIVE_FORWARD};
-ROBOT_STATE state = STOPPED;
+ROBOT_STATE state = LINE_FOLLOWING;
 ROBOT_STATE nextState = STOPPED;
 
 Button ButtonC(17);
@@ -24,7 +24,7 @@ WallFollow wallFollower(30, 30, 0, .7, -.5, 1);
 IR remoteChecker;
 RampDriver rampDriver;
 DeadReckon simpleDriver;
-PIDVelocity pid(15, 1.3, 0, 300);
+PIDVelocity pid(0,1,0.03,500);
 
 MotorSpeeds targetSpeeds;
 
