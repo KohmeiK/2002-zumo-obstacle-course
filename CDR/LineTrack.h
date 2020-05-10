@@ -41,7 +41,8 @@ class LineTrack{
       lineSensors.read(lineSensorValues, useEmitters ? QTR_EMITTERS_ON : QTR_EMITTERS_OFF);
       int average = (lineSensorValues[0]+lineSensorValues[1]+lineSensorValues[2] +
       lineSensorValues[3] + lineSensorValues[4])/NUM_SENSORS;
-      return(average < threshold);
+      if(whiteLine) return(average < threshold);
+      else return(average > threshold);
     }
     MotorSpeeds calcSpeeds(){
       MotorSpeeds output;

@@ -17,6 +17,7 @@ class KinematicTurn{
 
     bool isFinished(){
       //check if kenmatic based angle is close enough to target
+      return true;
     }
 
     void startTurn(int angle){

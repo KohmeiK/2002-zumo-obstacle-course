@@ -7,7 +7,7 @@ class DeadReckon{
   Zumo32U4Encoders enc; 
   MotorSpeeds targets;
   int targetDist;
-  const double multiplier = 1;
+  const double multiplier = DR_SpeedMutiplier;
   const float k_cmToEnc = 53.99325;
   
   public:

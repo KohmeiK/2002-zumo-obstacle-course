@@ -14,6 +14,8 @@ class WallFollow{
     float Kd;
     float Ki;
     float lastError = 0;
+
+    const int steeringMax = 30;
   public:
   WallFollow(){
     pinNum = WF_SensorPort;
@@ -45,6 +47,9 @@ class WallFollow{
 
     lastError = error;
     float steering = Kp*error + Kd*dir + Ki*errorSum;
+
+    if(steering > steeringMax) steering = steeringMax;
+    else if(steering < -steeringMax) steering = -steeringMax;
 
     MotorSpeeds output;
     output.left = baseSpeed - steering;
