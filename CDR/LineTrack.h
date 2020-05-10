@@ -5,17 +5,20 @@ Queue<int> queue(100);
 
 class LineTrack{
   private:
+    //EDIT THESE TO TUNE:
+    //plot your error, if its very noisy increase this value (up to 10 or 15 only) 
+    const int NUMBER_OF_READINGS_TO_AVE = 3;
+    //put your zumo on a uniform colored surface, get the avearge and negatve the value
+    const int SENSOR_IMBALANCE_OFFSET = 1050; 
+    //This is for line detection only (passed in from constructor)
+    int threshold; 
+  
     Zumo32U4LineSensors lineSensors;
     #define NUM_SENSORS 5
     uint16_t lineSensorValues[NUM_SENSORS];
     bool useEmitters = true;
-    int threshold; 
-    const int baseSpeed = 6;
-    int maxEffort = 50;
-    float Kp = 0.02;
-    float Ki = 0;
-    float Kd = 0.008;
-    bool whiteLine = true;
+    const int baseSpeed = 6; //Depending on the curvyness of line you could increase
+    int maxEffort = 30;
     
   public:
     LineTrack(int thresh){
@@ -33,29 +36,24 @@ class LineTrack{
     }
     MotorSpeeds calcSpeeds(){
       MotorSpeeds output;
-      lineSensors.read(lineSensorValues, useEmitters ? QTR_EMITTERS_ON : QTR_EMITTERS_OFF);
       static unsigned lastTime;
       unsigned long now = millis();
-      int innerError = (5*lineSensorValues[1])+(lineSensorValues[2])-(3*lineSensorValues[3]);
-//    int outerError = (lineSensorValues[0]-lineSensorValues[4])*2;
       static double aveSum = 0;
-      if(queue.count() >= 3){
-//        Serial.print("POP: ");
-//        Serial.println((int)queue.peek());
+      
+      lineSensors.read(lineSensorValues, useEmitters ? QTR_EMITTERS_ON : QTR_EMITTERS_OFF);
+      int innerError = (5*lineSensorValues[1])+(lineSensorValues[2])-(3*lineSensorValues[3]);
+      
+      if(queue.count() >= NUMBER_OF_READINGS_TO_AVE){
         aveSum -= (int)queue.pop();
       }
       
       aveSum += innerError;
-//      Serial.print("PUSH: ");
-//      Serial.println(innerError);
       queue.push(innerError);
 
-      float Error = (float)aveSum-1050;
-      
-      Serial.println(Error);
-//      Serial.print('\t');
-//      Serial.println(innerError);
-      
+      float Error = ((float)aveSum/(float)NUMBER_OF_READINGS_TO_AVE)-1050;
+
+      //uncomment and open serial plotter
+      //Serial.println(Error); 
       
       static int sumError = 0;
       sumError += Error;
@@ -75,17 +73,17 @@ class LineTrack{
 
       lastTime = now;
       lastError = Error;
-//
-////      Serial.print(lineSensorValues[0]);
+
+      //Need more debug? Uncomment these
+//      Serial.print(lineSensorValues[0]);
 //      Serial.print('\t'); 
 //      Serial.print(lineSensorValues[1]);
 //      Serial.print('\t');
-////      Serial.print(lineSensorValues[2]);
-////      Serial.print('\t');
+//      Serial.print(lineSensorValues[2]);
+//      Serial.print('\t');
 //      Serial.println(lineSensorValues[3]);
-////      Serial.print('\t');
+//      Serial.print('\t');
 //      Serial.println(lineSensorValues[4]);
-//      
       return output;
     }
   
