@@ -22,7 +22,7 @@ class KinematicTurn{
     }
 
     bool isFinished(){
-      return currentAngle >= targetAngle;
+      return abs(currentAngle) >= abs(targetAngle);
     }
 
     void startTurn(int angle){
@@ -34,13 +34,21 @@ class KinematicTurn{
       rightPos = 0;
       encodersTurn.getCountsAndResetLeft();
       encodersTurn.getCountsAndResetRight();
-      Serial.println("starting turn to " + String(targetAngle) + " from current angle " + String(currentAngle));
+      //Serial.println("starting turn to " + String(targetAngle) + " from current angle " + String(currentAngle));
     }
 
     MotorSpeeds calcSpeeds(){  
       calculateAngle();
-      output.left = -turningSpeed;
-      output.right = turningSpeed;
+      if (targetAngle > 0) 
+      {
+        output.left = -turningSpeed;
+        output.right = turningSpeed;
+      }
+      else 
+      {
+        output.left = turningSpeed;
+        output.right = -turningSpeed;
+      }
       return output;
     }
     double calculateAngle() {
@@ -54,11 +62,11 @@ class KinematicTurn{
         double speedRight = double(currPosRight - rightPos) * distPerTick / timeChange; // in/sec
         double speedLeft = double(currPosLeft - leftPos) * distPerTick / timeChange; // in/sec
         double angularVelocity = (speedRight - speedLeft) / wheelBase * 180 / PI; // deg/sec
-        Serial.println("prev Angle" + String(currentAngle));
+        //Serial.println("prev Angle" + String(currentAngle));
         currentAngle += angularVelocity * timeChange; //degrees
         leftPos = currPosLeft;
         rightPos = currPosRight;
-        Serial.println("next Angle" + String(currentAngle));
+        //Serial.println("next Angle" + String(currentAngle));
       }
       return currentAngle;
     }

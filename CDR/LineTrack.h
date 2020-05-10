@@ -95,14 +95,13 @@ class LineTrack{
 //      Serial.println(Error); 
       
       //Need more debug? Uncomment these
-      Serial.print(lineSensorValues[1]);
+      /*Serial.print(lineSensorValues[1]);
       Serial.print('\t');
       Serial.print(lineSensorValues[2]);
       Serial.print('\t');
       Serial.println(lineSensorValues[3]);
-
+      */
       return output;
     }
  
 };
-

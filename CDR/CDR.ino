@@ -76,7 +76,7 @@ void loop() {
       {
         state = TURN;
         nextState = LINE_FOLLOWING;
-        turn.startTurn(90);
+        turn.startTurn(-90);
         break;
       }
       targetSpeeds=wallFollower.calcSpeeds();
