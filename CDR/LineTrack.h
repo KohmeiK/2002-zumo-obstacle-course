@@ -10,8 +10,14 @@ class LineTrack{
     const int NUMBER_OF_READINGS_TO_AVE = 3;
     //put your zumo on a uniform colored surface, get the avearge and negatve the value
     const int SENSOR_IMBALANCE_OFFSET = 1050; 
-    //This is for line detection only (passed in from constructor)
+    //This is for line detection only - not line tracking (passed in from constructor)
     int threshold; 
+    //if your line brighter (whiter) than your surface?
+    bool whiteLine = true;
+    //PID constants
+    float Kp = 0.02;
+    float Ki = 0;
+    float Kd = 0.008;
   
     Zumo32U4LineSensors lineSensors;
     #define NUM_SENSORS 5
@@ -28,7 +34,6 @@ class LineTrack{
       lineSensors.initFiveSensors();
     }
     bool lineDetected(){
-      //read without emitter (from sample program)
       lineSensors.read(lineSensorValues, useEmitters ? QTR_EMITTERS_ON : QTR_EMITTERS_OFF);
       int average = (lineSensorValues[0]+lineSensorValues[1]+lineSensorValues[2] +
       lineSensorValues[3] + lineSensorValues[4])/NUM_SENSORS;
@@ -86,8 +91,6 @@ class LineTrack{
 //      Serial.println(lineSensorValues[4]);
       return output;
     }
-  
-
-  
+ 
 };
 
