@@ -97,8 +97,10 @@ class PIDVelocity {
         prevLeftError = errorLeft;
         prevRightError = errorRight;
 
-        if (sumLeft > intergrealCap) sumLeft = intergrealCap;
-        if (sumRight > intergrealCap) sumRight = intergrealCap;
+        if(sumLeft > intergrealCap) sumLeft = intergrealCap;
+        if(sumRight > intergrealCap) sumRight = intergrealCap;
+        if(sumLeft < -intergrealCap) sumLeft = -intergrealCap;
+        if(sumRight < -intergrealCap) sumRight = -intergrealCap;
 
         float effortLeft = Kp * errorLeft + Ki * sumLeft + Kd * derLeft;
         float effortRight = Kp * errorRight + Ki * sumRight + Kd * derRight;
@@ -111,6 +113,7 @@ class PIDVelocity {
         motors.setSpeeds(effortLeft, effortRight);
 
         //Serial.println("target left: " + String(targetLeft) + "\ttarget right: " + String(targetRight) + "\teffort left: " + String(effortLeft) + "\teffort right: " + String(effortRight));
+        //Serial.println("target left: " + String(targetLeft) + "\terror:  " + String(errorLeft) + "\tsumLeft: " + String(sumLeft) + "\tderLeft: " + String(derLeft));
       }
     }
 };
