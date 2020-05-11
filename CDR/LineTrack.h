@@ -28,8 +28,8 @@ class LineTrack{
     uint16_t lineSensorValues[NUM_SENSORS];
     const bool useEmitters = true;
     
-    const int baseSpeed = 10; //Depending on the curvyness of line you could increase
-    const int maxEffort = 10; //maybe increase if you have super sharp turns
+    const int baseSpeed = 12; //Depending on the curvyness of line you could increase
+    const int maxEffort = 25; //maybe increase if you have super sharp turns
 
     bool linePrevDetected = false;
     
@@ -42,8 +42,14 @@ class LineTrack{
     bool lineDetected(){
       lineSensors.read(lineSensorValues, useEmitters ? QTR_EMITTERS_ON : QTR_EMITTERS_OFF);
       int average = (lineSensorValues[1]+lineSensorValues[2] + lineSensorValues[3])/3;
+      Serial.print(lineSensorValues[1]);
+      Serial.print('\t');
+      Serial.print(lineSensorValues[2]);
+      Serial.print('\t');
+      Serial.println(lineSensorValues[3]);
       if(whiteLine){
-        if(average < 90){
+        int temp = LT_LineThreshold;
+        if(average < temp){
           Serial.print("LINE DETECTED!");
           Serial.print(lineSensorValues[1]);
           Serial.print('\t');

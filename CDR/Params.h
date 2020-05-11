@@ -20,11 +20,11 @@
  *                  Take the average of the 2 values and set it to this.
  */
  #define LT_Offset 280;
- #define LT_isWhiteLine true;
- #define LT_Kp 0.04;
+ #define LT_isWhiteLine false;
+ #define LT_Kp 0.1;
  #define LT_Ki 0;
- #define LT_Kd 0.024;
- #define LT_LineThreshold 110;
+ #define LT_Kd 0;
+ #define LT_LineThreshold 300;
 
 //BUTTON PinNum -> Pin number for start button (17 is btnC)
  #define BT_PinNum 17;
@@ -87,8 +87,8 @@
  *                  than your actual ramp angle.
  * BaseSpeed -> Basespeed for when appoaching and climbing the ramp.               
  */
- #define RD_FlatAngleToleranceDEG 3;
- #define RD_RampAngleDEG -20; //negative if you are climbing headfirst
+ #define RD_FlatAngleToleranceDEG 2;
+ #define RD_RampAngleDEG -5; //negative if you are climbing headfirst
  #define RD_BaseSpeed 15;
 
 /**
@@ -108,4 +108,6 @@
  #define DistPerTick .00772;// inch/tick
  #define KinematicTurnUpdateInterval 20;//ms
  
- 
+
+ #define FirstTurnMultiplier -1;
+ #define SeccondTurnMultiplier 1;

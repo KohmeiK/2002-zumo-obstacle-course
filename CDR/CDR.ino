@@ -1,3 +1,4 @@
+#include "Params.h"
 #include "Button.h"
 #include "DeadReckon.h"
 #include "EventTimer.h"
@@ -8,7 +9,6 @@
 #include "WallFollow.h"
 #include "MotorSpeedsStruct.h"
 #include "RampDriver.h"
-#include "Params.h"
 
 #include <Wire.h>
 #include <Zumo32U4.h>
@@ -36,7 +36,6 @@ MotorSpeeds targetSpeeds;
 
 void setup() {
   Serial.begin(115200);
-
   ButtonC.Init();
   remoteChecker.Init();
   turn.Init();
@@ -76,7 +75,8 @@ void loop() {
       {
         state = TURN;
         nextState = LINE_FOLLOWING;
-        turn.startTurn(-90);
+        int tempF = FirstTurnMultiplier; //Wtf why can't I plug in direclty?
+        turn.startTurn(tempF*-90);
         pid.resetPID();
         break;
       }
@@ -100,7 +100,8 @@ void loop() {
       {
         state = TURN;
         nextState = DRIVE_RAMP;
-        turn.startTurn(-90);
+        int tempS = SeccondTurnMultiplier;
+        turn.startTurn(tempS*-90);
         pid.resetPID();
         break;
       }
@@ -121,7 +122,7 @@ void loop() {
       {
         state = TURN;
         nextState = STOPPED;
-        turn.startTurn(390);
+        turn.startTurn(370);
         pid.resetPID();
         break;
       }

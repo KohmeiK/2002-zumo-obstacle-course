@@ -46,7 +46,7 @@ class WallFollow {
         //Conversion function from Analog Val to distance from LAB1
         float distanceCm = pow((analogRead(pinNum) / 2206.0), (-1 / 0.738));
 
-        Serial.println(distanceCm);
+//        Serial.println(distanceCm);
   
         //Serial.println(distanceCm);
         float error = targetDist - distanceCm;
@@ -67,7 +67,8 @@ class WallFollow {
         else if (steering < -steeringMax) steering = -steeringMax;
 
         //Apply Deadband Compensation
-        if(steering < WF_Deadband && steering > -WF_Deadband) steering = 0;
+        float localDeadband = WF_Deadband; //super weird, won't compile without this
+        if(steering < localDeadband && steering > -localDeadband) steering = 0;
         
         if (leftWall) steering = -steering;
   
