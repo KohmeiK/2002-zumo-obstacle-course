@@ -25,6 +25,8 @@
  #define LT_Ki 0;
  #define LT_Kd 0;
  #define LT_LineThreshold 300;
+ #define LT_BaseSpeed 12;
+ #define LT_MaxEffort 25;
 
 //BUTTON PinNum -> Pin number for start button (17 is btnC)
  #define BT_PinNum 17;

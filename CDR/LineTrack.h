@@ -28,8 +28,8 @@ class LineTrack{
     uint16_t lineSensorValues[NUM_SENSORS];
     const bool useEmitters = true;
     
-    const int baseSpeed = 12; //Depending on the curvyness of line you could increase
-    const int maxEffort = 25; //maybe increase if you have super sharp turns
+    const int baseSpeed = LT_BaseSpeed;
+    const int maxEffort = LT_MaxEffort;
 
     bool linePrevDetected = false;
     
