@@ -22,7 +22,13 @@ class KinematicTurn{
     }
 
     bool isFinished(){
-      return abs(currentAngle) >= abs(targetAngle);
+      bool finished = abs(currentAngle) >= abs(targetAngle);
+      if (finished)
+      {
+        encodersTurn.getCountsAndResetLeft();
+        encodersTurn.getCountsAndResetRight();
+      }
+      return finished;
     }
 
     void startTurn(int angle){
