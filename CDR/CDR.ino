@@ -45,7 +45,7 @@ void setup() {
   rampDriver.Init();
   wallFollower.Init();
   displayTimer.Start(200);
-  
+
   targetSpeeds.left = 0;
   targetSpeeds.right = 0;
 }
@@ -77,6 +77,7 @@ void loop() {
         state = TURN;
         nextState = LINE_FOLLOWING;
         turn.startTurn(-90);
+        pid.resetPID();
         break;
       }
       targetSpeeds=wallFollower.calcSpeeds();
@@ -85,6 +86,11 @@ void loop() {
       if (turn.isFinished())
       {
         state = nextState;
+        if (state == DRIVE_RAMP) 
+        {
+          rampDriver.Init();
+        }
+        pid.resetPID();
         break;
       }
       targetSpeeds=turn.calcSpeeds();
@@ -95,6 +101,7 @@ void loop() {
         state = TURN;
         nextState = DRIVE_RAMP;
         turn.startTurn(-90);
+        pid.resetPID();
         break;
       }
       targetSpeeds=lineTracker.calcSpeeds();
@@ -114,7 +121,8 @@ void loop() {
       {
         state = TURN;
         nextState = STOPPED;
-        turn.startTurn(360);
+        turn.startTurn(390);
+        pid.resetPID();
         break;
       }
       break;

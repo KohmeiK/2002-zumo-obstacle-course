@@ -16,6 +16,7 @@ class RampDriver{
     //RampDriver(){}
     void Init(){
       filter.Init();
+      climbedBefore = false;
     }
 
     bool isFinished(){

@@ -27,6 +27,14 @@ class PIDVelocity {
     float targetRight = 0;
     uint16_t prevNow;
     bool invertLeft;
+    
+    //error sum
+    int16_t sumLeft = 0;
+    int16_t sumRight = 0;
+
+    //for tracking previous counts
+    int16_t prevLeft = 0;
+    int16_t prevRight = 0;
   public:
     bool enable = true;
 
@@ -54,8 +62,16 @@ class PIDVelocity {
     }
 
     void setTargets(MotorSpeeds target) {
-      targetLeft = target.left;
-      targetRight = target.right;
+        targetLeft = target.left;
+        targetRight = target.right;
+    }
+
+    void resetPID() 
+    {
+      prevLeft = 0;
+      prevRight = 0;
+      sumLeft = 0;
+      sumRight = 0;
     }
 
     void update() {
@@ -66,19 +82,13 @@ class PIDVelocity {
         //clear the timer flag
         readyToPID = 0;
 
-        //for tracking previous counts
-        static int16_t prevLeft = 0;
-        static int16_t prevRight = 0;
         static int16_t prevLeftError = 0;
         static int16_t prevRightError = 0;
-
-        //error sum
-        static int16_t sumLeft = 0;
-        static int16_t sumRight = 0;
 
         noInterrupts();
         int16_t speedLeft = countsLeft - prevLeft;
         int16_t speedRight = countsRight - prevRight;
+        if (speedLeft > 100) Serial.println(String(countsLeft) + "\t" + String(prevLeft));
 
         prevLeft = countsLeft;
         prevRight = countsRight;
@@ -109,11 +119,12 @@ class PIDVelocity {
         if (abs(speedRight) < 2 && targetRight == 0) sumRight = effortRight = 0;
 
         if (invertLeft) effortLeft = -effortLeft;
-
+        
         motors.setSpeeds(effortLeft, effortRight);
 
         //Serial.println("target left: " + String(targetLeft) + "\ttarget right: " + String(targetRight) + "\teffort left: " + String(effortLeft) + "\teffort right: " + String(effortRight));
-        //Serial.println("target left: " + String(targetLeft) + "\terror:  " + String(errorLeft) + "\tsumLeft: " + String(sumLeft) + "\tderLeft: " + String(derLeft));
+        //if (effortRight > 100) Serial.println("target right: " + String(targetRight) + "\terror:  " + String(errorRight) + "\tsumRight: " + String(sumRight) + "\tderLeft: " + String(derRight) + "\teffort Right: " + String(effortRight));
+        //Serial.println("target left: " + String(targetLeft) + "\terror:  " + String(errorLeft) + "\tsumLeft: " + String(sumLeft) + "\tderLeft: " + String(derLeft) + "\teffort left: " + String(effortLeft));
       }
     }
 };

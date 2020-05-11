@@ -28,8 +28,10 @@ class LineTrack{
     uint16_t lineSensorValues[NUM_SENSORS];
     const bool useEmitters = true;
     
-    const int baseSpeed = 6; //Depending on the curvyness of line you could increase
-    const int maxEffort = 30; //maybe increase if you have super sharp turns
+    const int baseSpeed = 10; //Depending on the curvyness of line you could increase
+    const int maxEffort = 10; //maybe increase if you have super sharp turns
+
+    bool linePrevDetected = false;
     
   public:
     LineTrack(){
@@ -53,7 +55,15 @@ class LineTrack{
           return false;
         }
       }
-      else return(average > threshold);
+      else 
+      {
+        if (average > threshold) linePrevDetected = true;
+        else 
+        {
+          if (linePrevDetected) return true;
+          return false;
+        }
+      }
     }
     MotorSpeeds calcSpeeds(){
       MotorSpeeds output;
