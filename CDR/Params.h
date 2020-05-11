@@ -109,5 +109,6 @@
  #define KinematicTurnUpdateInterval 20;//ms
  
 
- #define FirstTurnMultiplier -1;
- #define SeccondTurnMultiplier 1;
+ #define FirstTurn -90;
+ #define SecondTurn 90;
+ #define ThirdTurn 370;

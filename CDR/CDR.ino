@@ -75,8 +75,8 @@ void loop() {
       {
         state = TURN;
         nextState = LINE_FOLLOWING;
-        int tempF = FirstTurnMultiplier; //Wtf why can't I plug in direclty?
-        turn.startTurn(tempF*-90);
+        int turn1 = FirstTurn; 
+        turn.startTurn(turn1);
         pid.resetPID();
         break;
       }
@@ -100,8 +100,8 @@ void loop() {
       {
         state = TURN;
         nextState = DRIVE_RAMP;
-        int tempS = SeccondTurnMultiplier;
-        turn.startTurn(tempS*-90);
+        int turn2 = SecondTurn;
+        turn.startTurn(turn2);
         pid.resetPID();
         break;
       }
@@ -122,7 +122,8 @@ void loop() {
       {
         state = TURN;
         nextState = STOPPED;
-        turn.startTurn(370);
+        int turn3 = ThirdTurn;
+        turn.startTurn(turn3);
         pid.resetPID();
         break;
       }
