@@ -63,6 +63,7 @@
  #define WF_Kp 1.0 ;
  #define WF_Ki 0;
  #define WF_Kd -0.025;
+ #define WF_MaxErrorSum 5;
  #define WF_isWallLeft false;
  #define WallTrackUpdateInterval 25;//ms
  #define WF_MaxSteer 5;

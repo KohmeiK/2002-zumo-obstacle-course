@@ -12,11 +12,12 @@ class WallFollow {
     int pinNum;
     int baseSpeed;
 
-    int errorSum = 0;
+    float errorSum = 0;
     float Kp;
     float Kd;
     float Ki;
     float lastError = 0;
+    float maxErrorSum = 0;
 
     bool leftWall = WF_isWallLeft;
 
@@ -28,6 +29,8 @@ class WallFollow {
       Kd = WF_Kd;
       Ki = WF_Ki;
       targetDist = WF_Distance;
+      maxErrorSum = WF_MaxErrorSum;
+      
       this->baseSpeed = WF_BaseSpeed;
     }
     void Init() {
@@ -52,6 +55,9 @@ class WallFollow {
         float error = targetDist - distanceCm;
   
         errorSum += error;
+
+        if (errorSum > maxErrorSum) errorSum = maxErrorSum;
+        if (errorSum < -maxErrorSum) errorSum = -maxErrorSum;
   
         uint16_t now = millis();
         uint16_t deltaTime = now - prevTime;
