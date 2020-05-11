@@ -1,10 +1,13 @@
 #include "MotorSpeedsStruct.h"
+#include "Params.h"
 
 class WallFollow {
   private:
     int targetDist;
     int lastReading;
     uint16_t prevTime;
+    uint16_t lastUpdateTime;
+    int updateInterval = WallTrackUpdateInterval;
 
     int pinNum;
     int baseSpeed;
@@ -17,7 +20,7 @@ class WallFollow {
 
     bool leftWall = WF_isWallLeft;
 
-    const int steeringMax = 30;
+    const int steeringMax = WF_MaxSteer;
   public:
     WallFollow() {
       pinNum = WF_SensorPort;
@@ -34,33 +37,46 @@ class WallFollow {
       targetDist = distCM;
     }
     MotorSpeeds calcSpeeds() {
-      //Conversion function from Analog Val to distance from LAB1
-      float distanceCm = pow((analogRead(pinNum) / 2206.0), (-1 / 0.738));
 
-      //Serial.println(distanceCm);
-      float error = targetDist - distanceCm;
+      uint16_t currentUpdateTime = millis();
+      if (currentUpdateTime - lastUpdateTime > updateInterval) 
+        {
+        lastUpdateTime = currentUpdateTime;
+        
+        //Conversion function from Analog Val to distance from LAB1
+        float distanceCm = pow((analogRead(pinNum) / 2206.0), (-1 / 0.738));
 
-      errorSum += error;
+        Serial.println(distanceCm);
+  
+        //Serial.println(distanceCm);
+        float error = targetDist - distanceCm;
+  
+        errorSum += error;
+  
+        uint16_t now = millis();
+        uint16_t deltaTime = now - prevTime;
+        prevTime = now;
+  
+        //Scale down deltaTime so D value is not crazy high
+        float dir = (error - lastError) / (0.01 * deltaTime);
+  
+        lastError = error;
+        float steering = Kp * error + Kd * dir + Ki * errorSum;
+  
+        if (steering > steeringMax) steering = steeringMax;
+        else if (steering < -steeringMax) steering = -steeringMax;
 
-      uint16_t now = millis();
-      uint16_t deltaTime = now - prevTime;
-      prevTime = now;
+        //Apply Deadband Compensation
+        if(steering < WF_Deadband && steering > -WF_Deadband) steering = 0;
+        
+        if (leftWall) steering = -steering;
+  
+        MotorSpeeds output;
+        output.left = baseSpeed - steering;
+        output.right = baseSpeed + steering;
 
-      //Scale down deltaTime so D value is not crazy high
-      float dir = (error - lastError) / (0.01 * deltaTime);
-
-      lastError = error;
-      float steering = Kp * error + Kd * dir + Ki * errorSum;
-
-      if (steering > steeringMax) steering = steeringMax;
-      else if (steering < -steeringMax) steering = -steeringMax;
-
-      if (leftWall) steering = -steering;
-
-      MotorSpeeds output;
-      output.left = baseSpeed;// - steering;
-      output.right = baseSpeed;// + steering;
-
-      return output;
-    }
+        //Serial.println
+        return output;
+      }
+   }
 };

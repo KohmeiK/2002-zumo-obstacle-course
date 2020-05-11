@@ -58,10 +58,13 @@
  #define WF_SensorPort A0;
  #define WF_Distance 25;
  #define WF_BaseSpeed 10;
- #define WF_Kp 0.4;
+ #define WF_Kp 1.0 ;
  #define WF_Ki 0;
- #define WF_Kd -0.1;
+ #define WF_Kd -0.025;
  #define WF_isWallLeft false;
+ #define WallTrackUpdateInterval 25;//ms
+ #define WF_MaxSteer 5;
+ #define WF_Deadband 1.25;
 
  /**
   * PID VELOCITY
@@ -73,7 +76,7 @@
  #define PV_Ki 1;
  #define PV_Kd 0.03;
  #define PV_IntergeralCap 500;
- #define InvertLeft true;
+ #define InvertLeft false;
 
 /**
  * RAMP DIRVER
@@ -103,6 +106,6 @@
  #define TurningSpeed 15.;
  #define WheelDiameter 1.5;// inch
  #define DistPerTick .00772;// inch/tick
- #define UpdateInterval 20;//ms
+ #define KinematicTurnUpdateInterval 20;//ms
  
  

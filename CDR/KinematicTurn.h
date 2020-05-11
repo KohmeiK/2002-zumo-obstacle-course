@@ -12,7 +12,7 @@ class KinematicTurn{
     int leftPos = 0;
     int rightPos = 0;
     double distPerTick = DistPerTick;
-    int updateInterval = UpdateInterval;
+    int updateInterval = KinematicTurnUpdateInterval;
     Zumo32U4Encoders encodersTurn;
     MotorSpeeds output;
     float currentAngle = 0;
