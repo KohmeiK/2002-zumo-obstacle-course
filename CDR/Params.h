@@ -21,12 +21,13 @@
  */
  #define LT_Offset 280;
  #define LT_isWhiteLine false;
- #define LT_Kp 0.1;
+ #define LT_Kp 0.08;
  #define LT_Ki 0;
  #define LT_Kd 0;
- #define LT_LineThreshold 300;
- #define LT_BaseSpeed 12;
- #define LT_MaxEffort 25;
+ #define LT_LineThreshold 711.562;
+ #define LT_BaseSpeed 17;
+ #define LT_MaxEffort 10;
+ #define LT_Deadband 3.0;
 
 //BUTTON PinNum -> Pin number for start button (17 is btnC)
  #define BT_PinNum 17;
@@ -112,6 +113,6 @@
  #define KinematicTurnUpdateInterval 20;//ms
  
 
- #define FirstTurn -90;
- #define SecondTurn 90;
+ #define FirstTurn  50;
+ #define SecondTurn 80;
  #define ThirdTurn 370;

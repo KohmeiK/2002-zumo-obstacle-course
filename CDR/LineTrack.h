@@ -100,6 +100,10 @@ class LineTrack{
       else if(diff < -maxEffort) diff = -maxEffort;
 
       if(whiteLine) diff = -diff;
+
+      //Apply Deadband Compensation
+      float localLTDeadband = LT_Deadband; //super weird, won't compile without this
+      if(diff < localLTDeadband && diff > -localLTDeadband) diff = 0;
       
       output.left = baseSpeed - (diff);
       output.right = baseSpeed + (diff);

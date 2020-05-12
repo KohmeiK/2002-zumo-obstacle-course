@@ -73,8 +73,8 @@ class WallFollow {
         else if (steering < -steeringMax) steering = -steeringMax;
 
         //Apply Deadband Compensation
-        float localDeadband = WF_Deadband; //super weird, won't compile without this
-        if(steering < localDeadband && steering > -localDeadband) steering = 0;
+        float localWFDeadband = WF_Deadband; //super weird, won't compile without this
+        if(steering < localWFDeadband && steering > -localWFDeadband) steering = 0;
         
         if (leftWall) steering = -steering;
   
