@@ -51,11 +51,6 @@ class LineTrack{
         int temp = LT_LineThreshold;
         if(average < temp){
           Serial.print("LINE DETECTED!");
-          Serial.print(lineSensorValues[1]);
-          Serial.print('\t');
-          Serial.print(lineSensorValues[2]);
-          Serial.print('\t');
-          Serial.println(lineSensorValues[3]);
           return true;
         }else{
           return false;
@@ -77,17 +72,21 @@ class LineTrack{
       unsigned long now = millis();
       static double aveSum = 0;
       
+      //read sensor values and weight them according to distance away from "center"
       lineSensors.read(lineSensorValues, useEmitters ? QTR_EMITTERS_ON : QTR_EMITTERS_OFF);
       int innerError = (5*lineSensorValues[1])+(lineSensorValues[2])-(3*lineSensorValues[3]);
 
+      //average last N readings
       if(queue.count() >= NUMBER_OF_READINGS_TO_AVE){
         aveSum -= (int)queue.pop();
       }
       aveSum += innerError;
       queue.push(innerError);
 
+      //offset and find error
       float Error = ((float)aveSum/(float)NUMBER_OF_READINGS_TO_AVE)-SENSOR_IMBALANCE_OFFSET;
       
+      //standard PID
       static int sumError = 0;
       sumError += Error;
       static int lastError;
@@ -96,9 +95,11 @@ class LineTrack{
 
       float diff = Kp*(float)Error + Ki*(float)sumError + Kd*(float)derError;
 
+      //limit effort
       if(diff > maxEffort) diff = maxEffort;
       else if(diff < -maxEffort) diff = -maxEffort;
 
+      //invert for line color
       if(whiteLine) diff = -diff;
 
       //Apply Deadband Compensation
