@@ -20,6 +20,7 @@ class RampDriver{
     }
 
     bool isFinished(){
+      //if flat and has already climbed
       return(abs(currentAngleDEG) < flatTolerance && climbedBefore);
     }
 
@@ -27,8 +28,10 @@ class RampDriver{
       if(filter.CalcAngle(currentAngleRAD)){
         currentAngleDEG = currentAngleRAD * 180.0/3.14152;
 //        Serial.println(currentAngleDEG);
+        //are we more tilted than the min climb angle?
         if(currentAngleDEG <= rampAngleDEG) climbedBefore = true;
       }
+      //return constant speed
       MotorSpeeds output;
       output.left = baseSpeed;
       output.right = baseSpeed;
